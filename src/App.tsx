@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import "./App.css";
 import Navigation from "./components/navigation/navigation";
 import Video from "./components/video/video";
@@ -16,6 +17,20 @@ function App() {
     y: window.innerHeight - videoDimensions.current.h,
   });
 
+  const clamp = (value, min, max) => {
+    return Math.min(Math.max(value, min), max);
+  };
+
+  const handleResize = (event) => {
+    const rX = window.innerWidth - videoDimensions.current.w;
+    const rY = window.innerHeight - videoDimensions.current.h;
+
+    setCoordinates({
+      x: rX,
+      y: rY,
+    });
+  };
+
   /**
    * Calculate mouse movement
    */
@@ -23,10 +38,19 @@ function App() {
     if (draggingRef.current) {
       const deltaX = event.clientX - initialMousePosRef.current.x;
       const deltaY = event.clientY - initialMousePosRef.current.y;
+      // Calculate new coordinates based on initial position plus the delta
+      let newX = initialWindowPosRef.current.x + deltaX;
+      let newY = initialWindowPosRef.current.y + deltaY;
+
+      newX = clamp(newX, 0, window.innerWidth - videoDimensions.current.w);
+      newY = clamp(newY, 0, window.innerHeight - videoDimensions.current.h);
+
       setCoordinates({
-        x: initialWindowPosRef.current.x + deltaX,
-        y: initialWindowPosRef.current.y + deltaY,
+        x: newX,
+        y: newY,
       });
+
+      console.log(coordinates);
     }
   };
 
@@ -53,9 +77,11 @@ function App() {
 
   useEffect(() => {
     window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("resize", handleResize);
     };
   });
 
