@@ -9,6 +9,10 @@ function Video({ coordinates, ref }) {
         height: "200px",
         backgroundColor: "red",
         transition: "transform 200ms cubic-bezier(.66,.23,.38,1.04)", // Adjust timing/easing as needed
+        userSelect: "none",
+        WebkitUserSelect: "none",
+        MozUserSelect: "none",
+        msUserSelect: "none",
       }}
       role="dialog"
       ref={ref}
