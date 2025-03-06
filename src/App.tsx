@@ -12,6 +12,8 @@ function App() {
   const draggingRef = useRef<boolean>(false);
   const initialMousePosRef = useRef({ x: 0, y: 0 });
   const initialWindowPosRef = useRef({ x: 0, y: 0 });
+  const xOffset = useRef(0);
+  const yOffset = useRef(0);
   const [coordinates, setCoordinates] = useState({
     x: window.innerWidth - videoDimensions.current.w,
     y: window.innerHeight - videoDimensions.current.h,
@@ -24,11 +26,7 @@ function App() {
   const handleResize = (event) => {
     const rX = window.innerWidth - videoDimensions.current.w;
     const rY = window.innerHeight - videoDimensions.current.h;
-
-    setCoordinates({
-      x: rX,
-      y: rY,
-    });
+    setCoordinates({ x: rX, y: rY });
   };
 
   /**
@@ -56,6 +54,7 @@ function App() {
 
   const handleMouseUp = () => {
     draggingRef.current = false;
+
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
     console.log("Drag ended");
