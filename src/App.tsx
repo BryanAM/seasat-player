@@ -1,4 +1,3 @@
-import { X } from "lucide-react";
 import "./App.css";
 import Navigation from "./components/navigation/navigation";
 import Video from "./components/video/video";
@@ -12,8 +11,7 @@ function App() {
   const draggingRef = useRef<boolean>(false);
   const initialMousePosRef = useRef({ x: 0, y: 0 });
   const initialWindowPosRef = useRef({ x: 0, y: 0 });
-  const xOffset = useRef(0);
-  const yOffset = useRef(0);
+
   const [coordinates, setCoordinates] = useState({
     x: window.innerWidth - videoDimensions.current.w,
     y: window.innerHeight - videoDimensions.current.h,

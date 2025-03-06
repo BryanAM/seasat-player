@@ -3,8 +3,12 @@ function Video({ coordinates, ref }) {
     <div
       className="h-[220px] w-[300px] bg-red-500 rounded-2xl fixed"
       style={{
-        top: `${coordinates.y}px`,
-        left: `${coordinates.x}px`,
+        position: "fixed",
+        transform: `translate(${coordinates.x}px, ${coordinates.y}px)`,
+        width: "300px",
+        height: "200px",
+        backgroundColor: "red",
+        transition: "transform 200ms cubic-bezier(.66,.23,.38,1.04)", // Adjust timing/easing as needed
       }}
       role="dialog"
       ref={ref}
