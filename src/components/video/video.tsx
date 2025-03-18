@@ -4,7 +4,7 @@ function Video({ coordinates, ref, dragging, dimensions }) {
       role="dialog"
       aria-label="mini-player"
       ref={ref}
-      className="h-[220px] w-[300px] bg-zinc-800 rounded-2xl shadow-sm hover:shadow-xl fixed"
+      className=" h-[220px] w-[300px] bg-zinc-800 rounded-2xl shadow-sm hover:shadow-xl fixed"
       style={{
         position: "fixed",
         transform: `translate(${coordinates.x}px, ${coordinates.y}px)`,

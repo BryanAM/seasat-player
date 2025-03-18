@@ -2,7 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import Navigation from "./components/navigation/navigation";
 import Video from "./components/video/video";
-import { useIsMobile } from "./hooks/is-mobile";
+import { useIsMobile } from "./hooks/useIsMobile";
 import { useDraggable } from "./hooks/useDraggable";
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
     height: 200,
     width: 300,
   });
+
   const { videoRef, coordinates, draggingRef } = useDraggable(
     videoDimension.height,
     videoDimension.width

@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useState, useRef, useEffect } from "react";
-import { useIsMobile } from "@/hooks/is-mobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface VitalProps {
   icon?: React.JSX.Element;
