@@ -18,9 +18,9 @@ export const useDraggable = (height: number, width: number) => {
   };
 
   const handleResize = () => {
-    const rX = window.innerWidth - videoDimensions.current.w;
-    const rY = window.innerHeight - videoDimensions.current.h;
-    setCoordinates({ x: rX, y: rY });
+    const dX = window.innerWidth - videoDimensions.current.w;
+    const dY = window.innerHeight - videoDimensions.current.h;
+    setCoordinates({ x: dX, y: dY });
   };
 
   /**
