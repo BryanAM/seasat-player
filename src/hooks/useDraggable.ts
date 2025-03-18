@@ -27,24 +27,27 @@ export const useDraggable = (height: number, width: number) => {
    * Calculate pointer movment inrelation to the video window
    * Set window coordinates
    */
-  const handlePointerMove = useCallback((event: PointerEvent) => {
-    if (draggingRef.current) {
-      if (animationFrameId.current)
-        cancelAnimationFrame(animationFrameId.current);
-      animationFrameId.current = requestAnimationFrame(() => {
-        const dX = event.clientX - initialMousePosRef.current.x;
-        const dY = event.clientY - initialMousePosRef.current.y;
+  const handlePointerMove = useCallback(
+    (event: PointerEvent) => {
+      if (draggingRef.current) {
+        if (animationFrameId.current)
+          cancelAnimationFrame(animationFrameId.current);
+        animationFrameId.current = requestAnimationFrame(() => {
+          const dX = event.clientX - initialMousePosRef.current.x;
+          const dY = event.clientY - initialMousePosRef.current.y;
 
-        let newX = initialWindowPosRef.current.x + dX;
-        let newY = initialWindowPosRef.current.y + dY;
+          let newX = initialWindowPosRef.current.x + dX;
+          let newY = initialWindowPosRef.current.y + dY;
 
-        newX = clamp(newX, 0, window.innerWidth - width);
-        newY = clamp(newY, 0, window.innerHeight - height);
+          newX = clamp(newX, 0, window.innerWidth - width);
+          newY = clamp(newY, 0, window.innerHeight - height);
 
-        setCoordinates({ x: newX, y: newY });
-      });
-    }
-  }, []);
+          setCoordinates({ x: newX, y: newY });
+        });
+      }
+    },
+    [height, width]
+  );
 
   /**
    * Detect of pointer up, remove relevant listeners
