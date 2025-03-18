@@ -4,6 +4,8 @@ import Video from "./components/video/video";
 import { useIsMobile } from "./hooks/is-mobile";
 import { useEffect, useRef, useState } from "react";
 
+let animationFrameId;
+
 function App() {
   const isMobile = useIsMobile();
   const videoRef = useRef<HTMLDivElement>(null);
@@ -30,29 +32,33 @@ function App() {
   /**
    * Calculate mouse movement
    */
-  const handleMouseMove = (event) => {
+  const handlePointerMove = (event) => {
     if (draggingRef.current) {
-      const deltaX = event.clientX - initialMousePosRef.current.x;
-      const deltaY = event.clientY - initialMousePosRef.current.y;
-      // Calculate new coordinates based on initial position plus the delta
-      let newX = initialWindowPosRef.current.x + deltaX;
-      let newY = initialWindowPosRef.current.y + deltaY;
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      animationFrameId = requestAnimationFrame(() => {
+        const deltaX = event.clientX - initialMousePosRef.current.x;
+        const deltaY = event.clientY - initialMousePosRef.current.y;
 
-      newX = clamp(newX, 0, window.innerWidth - videoDimensions.current.w);
-      newY = clamp(newY, 0, window.innerHeight - videoDimensions.current.h);
+        let newX = initialWindowPosRef.current.x + deltaX;
+        let newY = initialWindowPosRef.current.y + deltaY;
 
-      setCoordinates({
-        x: newX,
-        y: newY,
+        newX = clamp(newX, 0, window.innerWidth - videoDimensions.current.w);
+        newY = clamp(newY, 0, window.innerHeight - videoDimensions.current.h);
+
+        setCoordinates({ x: newX, y: newY });
       });
     }
   };
 
-  const handleMouseUp = () => {
-    draggingRef.current = false;
-
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleMouseUp);
+  const handlePointerUp = (event) => {
+    if (videoRef.current) {
+      draggingRef.current = false;
+      // Release pointer capture
+      videoRef.current.releasePointerCapture(event.pointerId);
+      videoRef.current.removeEventListener("pointermove", handlePointerMove);
+      videoRef.current.removeEventListener("pointerup", handlePointerUp);
+      videoRef.current.removeEventListener("pointercancel", handlePointerUp);
+    }
   };
 
   /**
@@ -64,17 +70,20 @@ function App() {
       draggingRef.current = true;
       initialMousePosRef.current = { x: event.clientX, y: event.clientY };
       initialWindowPosRef.current = { ...coordinates };
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
+      // Capture the pointer to ensure all events are sent to this element
+      videoRef.current.setPointerCapture(event.pointerId);
+      videoRef.current.addEventListener("pointermove", handlePointerMove);
+      videoRef.current.addEventListener("pointerup", handlePointerUp);
+      videoRef.current.addEventListener("pointercancel", handlePointerUp);
     }
   };
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("pointerdown", handleMouseDown);
     window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("pointerdown", handleMouseDown);
       window.removeEventListener("resize", handleResize);
     };
   });

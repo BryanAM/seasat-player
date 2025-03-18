@@ -1,21 +1,25 @@
 function Video({ coordinates, ref, dragging }) {
   return (
     <div
-      className="h-[220px] w-[300px] bg-red-500 rounded-2xl fixed"
+      role="dialog"
+      aria-label="mini-player"
+      ref={ref}
+      className="h-[220px] w-[300px] bg-red-500 rounded-2xl shadow-sm hover:shadow-xl fixed"
       style={{
         position: "fixed",
         transform: `translate(${coordinates.x}px, ${coordinates.y}px)`,
+        transition: `${!dragging && "transform 500ms cubic-bezier(0.5,0,0,1)"}`,
         width: "300px",
         height: "200px",
-        backgroundColor: "red",
-        transition: `${!dragging && "transform 200ms cubic-bezier(0,0,.58,1)"}`, // Adjust timing/easing as needed
+        cursor: "pointer",
         userSelect: "none",
+        touchAction: "none",
+        // can cost in performance so use sparingly
+        willChange: "transform",
         WebkitUserSelect: "none",
         MozUserSelect: "none",
         msUserSelect: "none",
       }}
-      role="dialog"
-      ref={ref}
     >
       <iframe
         className="rounded-t-2xl"
