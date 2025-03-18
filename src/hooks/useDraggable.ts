@@ -91,18 +91,12 @@ export const useDraggable = (height: number, width: number) => {
   );
 
   useEffect(() => {
-    const currentElement = videoRef.current;
     window.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("resize", handleResize);
-      if (currentElement) {
-        currentElement.removeEventListener("pointermove", handlePointerMove);
-        currentElement.removeEventListener("pointerup", handlePointerUp);
-        currentElement.removeEventListener("pointercancel", handlePointerUp);
-      }
     };
   });
 
