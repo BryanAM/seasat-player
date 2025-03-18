@@ -4,13 +4,12 @@ import Video from "./components/video/video";
 import { useIsMobile } from "./hooks/is-mobile";
 import { useEffect, useRef, useState } from "react";
 
-let animationFrameId;
-
 function App() {
   const isMobile = useIsMobile();
   const videoRef = useRef<HTMLDivElement>(null);
   const videoDimensions = useRef({ h: 220, w: 300 });
   const draggingRef = useRef<boolean>(false);
+  const animationFrameId = useRef<number>(null);
   const initialMousePosRef = useRef({ x: 0, y: 0 });
   const initialWindowPosRef = useRef({ x: 0, y: 0 });
 
@@ -19,11 +18,11 @@ function App() {
     y: window.innerHeight - videoDimensions.current.h,
   });
 
-  const clamp = (value, min, max) => {
+  const clamp = (value: number, min: number, max: number) => {
     return Math.min(Math.max(value, min), max);
   };
 
-  const handleResize = (event) => {
+  const handleResize = () => {
     const rX = window.innerWidth - videoDimensions.current.w;
     const rY = window.innerHeight - videoDimensions.current.h;
     setCoordinates({ x: rX, y: rY });
@@ -32,10 +31,11 @@ function App() {
   /**
    * Calculate mouse movement
    */
-  const handlePointerMove = (event) => {
+  const handlePointerMove = (event: PointerEvent) => {
     if (draggingRef.current) {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      animationFrameId = requestAnimationFrame(() => {
+      if (animationFrameId.current)
+        cancelAnimationFrame(animationFrameId.current);
+      animationFrameId.current = requestAnimationFrame(() => {
         const deltaX = event.clientX - initialMousePosRef.current.x;
         const deltaY = event.clientY - initialMousePosRef.current.y;
 
@@ -50,7 +50,7 @@ function App() {
     }
   };
 
-  const handlePointerUp = (event) => {
+  const handlePointerUp = (event: PointerEvent) => {
     if (videoRef.current) {
       draggingRef.current = false;
       // Release pointer capture
@@ -64,8 +64,12 @@ function App() {
   /**
    * Detect if our mousedown is on draggable area
    */
-  const handleMouseDown = (event) => {
-    if (videoRef.current && videoRef.current.contains(event.target)) {
+  const handlePointerDown = (event: PointerEvent) => {
+    if (
+      videoRef.current &&
+      event.target instanceof Node &&
+      videoRef.current.contains(event.target)
+    ) {
       // handle drag
       draggingRef.current = true;
       initialMousePosRef.current = { x: event.clientX, y: event.clientY };
@@ -79,11 +83,11 @@ function App() {
   };
 
   useEffect(() => {
-    window.addEventListener("pointerdown", handleMouseDown);
+    window.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener("pointerdown", handleMouseDown);
+      window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("resize", handleResize);
     };
   });
