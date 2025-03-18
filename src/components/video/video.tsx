@@ -1,4 +1,4 @@
-function Video({ coordinates, ref }) {
+function Video({ coordinates, ref, dragging }) {
   return (
     <div
       className="h-[220px] w-[300px] bg-red-500 rounded-2xl fixed"
@@ -8,7 +8,7 @@ function Video({ coordinates, ref }) {
         width: "300px",
         height: "200px",
         backgroundColor: "red",
-        transition: "transform 200ms cubic-bezier(.66,.23,.38,1.04)", // Adjust timing/easing as needed
+        transition: `${!dragging && "transform 200ms cubic-bezier(0,0,.58,1)"}`, // Adjust timing/easing as needed
         userSelect: "none",
         WebkitUserSelect: "none",
         MozUserSelect: "none",

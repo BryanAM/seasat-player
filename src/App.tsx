@@ -45,8 +45,6 @@ function App() {
         x: newX,
         y: newY,
       });
-
-      console.log(coordinates);
     }
   };
 
@@ -55,7 +53,6 @@ function App() {
 
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
-    console.log("Drag ended");
   };
 
   /**
@@ -86,7 +83,11 @@ function App() {
     <section className="flex flex-col bg-accent min-h-dvh">
       <Navigation isMobile={isMobile} />
 
-      <Video ref={videoRef} coordinates={coordinates} />
+      <Video
+        ref={videoRef}
+        coordinates={coordinates}
+        dragging={draggingRef.current}
+      />
     </section>
   );
 }
