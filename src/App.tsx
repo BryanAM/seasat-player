@@ -2,11 +2,9 @@ import "./App.css";
 import { useState } from "react";
 import Navigation from "./components/navigation/navigation";
 import Video from "./components/video/video";
-import { useIsMobile } from "./hooks/useIsMobile";
 import { useDraggable } from "./hooks/useDraggable";
 
 function App() {
-  const isMobile = useIsMobile();
   const [videoDimension, setVideoDimensions] = useState({
     height: 200,
     width: 300,
@@ -19,7 +17,7 @@ function App() {
 
   return (
     <section className="flex flex-col bg-accent min-h-dvh">
-      <Navigation isMobile={isMobile} />
+      <Navigation />
 
       <Video
         ref={videoRef}
