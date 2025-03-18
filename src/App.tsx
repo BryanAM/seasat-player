@@ -10,7 +10,7 @@ function App() {
     width: 300,
   });
 
-  const { videoRef, coordinates, draggingRef } = useDraggable(
+  const { videoRef, coordinates, draggingRef, handleResize } = useDraggable(
     videoDimension.height,
     videoDimension.width
   );
@@ -25,6 +25,7 @@ function App() {
         coordinates={coordinates}
         dragging={draggingRef.current}
         setPlayerSize={setVideoDimensions}
+        setOrigin={handleResize}
       />
     </section>
   );

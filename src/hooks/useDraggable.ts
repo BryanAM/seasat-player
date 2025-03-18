@@ -100,5 +100,5 @@ export const useDraggable = (height: number, width: number) => {
     };
   });
 
-  return { videoRef, coordinates, draggingRef };
+  return { videoRef, coordinates, draggingRef, handleResize };
 };
