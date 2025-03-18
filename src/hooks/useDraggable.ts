@@ -1,32 +1,33 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+
+const clamp = (value: number, min: number, max: number) => {
+  return Math.min(Math.max(value, min), max);
+};
 
 export const useDraggable = (height: number, width: number) => {
   const videoRef = useRef<HTMLDivElement>(null);
-  const videoDimensions = useRef({ h: height, w: width });
+
   const draggingRef = useRef<boolean>(false);
   const animationFrameId = useRef<number>(null);
   const initialMousePosRef = useRef({ x: 0, y: 0 });
   const initialWindowPosRef = useRef({ x: 0, y: 0 });
 
   const [coordinates, setCoordinates] = useState({
-    x: window.innerWidth - videoDimensions.current.w,
-    y: window.innerHeight - videoDimensions.current.h,
+    x: window.innerWidth - width,
+    y: window.innerHeight - height,
   });
 
-  const clamp = (value: number, min: number, max: number) => {
-    return Math.min(Math.max(value, min), max);
-  };
-
   const handleResize = () => {
-    const dX = window.innerWidth - videoDimensions.current.w;
-    const dY = window.innerHeight - videoDimensions.current.h;
+    const dX = window.innerWidth - width;
+    const dY = window.innerHeight - height;
     setCoordinates({ x: dX, y: dY });
   };
 
   /**
-   * Calculate mouse movement
+   * Calculate pointer movment inrelation to the video window
+   * Set window coordinates
    */
-  const handlePointerMove = (event: PointerEvent) => {
+  const handlePointerMove = useCallback((event: PointerEvent) => {
     if (draggingRef.current) {
       if (animationFrameId.current)
         cancelAnimationFrame(animationFrameId.current);
@@ -37,45 +38,54 @@ export const useDraggable = (height: number, width: number) => {
         let newX = initialWindowPosRef.current.x + dX;
         let newY = initialWindowPosRef.current.y + dY;
 
-        newX = clamp(newX, 0, window.innerWidth - videoDimensions.current.w);
-        newY = clamp(newY, 0, window.innerHeight - videoDimensions.current.h);
+        newX = clamp(newX, 0, window.innerWidth - width);
+        newY = clamp(newY, 0, window.innerHeight - height);
 
         setCoordinates({ x: newX, y: newY });
       });
     }
-  };
-
-  const handlePointerUp = (event: PointerEvent) => {
-    if (videoRef.current) {
-      draggingRef.current = false;
-      // Release pointer capture
-      videoRef.current.releasePointerCapture(event.pointerId);
-      videoRef.current.removeEventListener("pointermove", handlePointerMove);
-      videoRef.current.removeEventListener("pointerup", handlePointerUp);
-      videoRef.current.removeEventListener("pointercancel", handlePointerUp);
-    }
-  };
+  }, []);
 
   /**
-   * Detect if our mousedown is on draggable area
+   * Detect of pointer up, remove relevant listeners
    */
-  const handlePointerDown = (event: PointerEvent) => {
-    if (
-      videoRef.current &&
-      event.target instanceof Node &&
-      videoRef.current.contains(event.target)
-    ) {
-      // handle drag
-      draggingRef.current = true;
-      initialMousePosRef.current = { x: event.clientX, y: event.clientY };
-      initialWindowPosRef.current = { ...coordinates };
-      // Capture the pointer to ensure all events are sent to this element
-      videoRef.current.setPointerCapture(event.pointerId);
-      videoRef.current.addEventListener("pointermove", handlePointerMove);
-      videoRef.current.addEventListener("pointerup", handlePointerUp);
-      videoRef.current.addEventListener("pointercancel", handlePointerUp);
-    }
-  };
+  const handlePointerUp = useCallback(
+    (event: PointerEvent) => {
+      if (videoRef.current) {
+        draggingRef.current = false;
+        // Release pointer capture
+        videoRef.current.releasePointerCapture(event.pointerId);
+        videoRef.current.removeEventListener("pointermove", handlePointerMove);
+        videoRef.current.removeEventListener("pointerup", handlePointerUp);
+        videoRef.current.removeEventListener("pointercancel", handlePointerUp);
+      }
+    },
+    [handlePointerMove]
+  );
+
+  /**
+   * Detect of pointerdown (click or touch) within draggable area
+   */
+  const handlePointerDown = useCallback(
+    (event: PointerEvent) => {
+      if (
+        videoRef.current &&
+        event.target instanceof Node &&
+        videoRef.current.contains(event.target)
+      ) {
+        // handle drag
+        draggingRef.current = true;
+        initialMousePosRef.current = { x: event.clientX, y: event.clientY };
+        initialWindowPosRef.current = { ...coordinates };
+        // Capture the pointer to ensure all events are sent to this element
+        videoRef.current.setPointerCapture(event.pointerId);
+        videoRef.current.addEventListener("pointermove", handlePointerMove);
+        videoRef.current.addEventListener("pointerup", handlePointerUp);
+        videoRef.current.addEventListener("pointercancel", handlePointerUp);
+      }
+    },
+    [coordinates, handlePointerMove, handlePointerUp]
+  );
 
   useEffect(() => {
     window.addEventListener("pointerdown", handlePointerDown);
