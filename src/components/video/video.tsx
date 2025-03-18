@@ -1,11 +1,25 @@
+import { Fullscreen } from "lucide-react";
+
 interface VideoPropTypes {
   coordinates: { x: number; y: number };
   ref: React.Ref<HTMLDivElement> | undefined;
   dragging: boolean;
   dimensions: { height: number; width: number };
+  setPlayerSize: React.Dispatch<
+    React.SetStateAction<{
+      height: number;
+      width: number;
+    }>
+  >;
 }
 
-function Video({ coordinates, ref, dragging, dimensions }: VideoPropTypes) {
+function Video({
+  coordinates,
+  ref,
+  dragging,
+  dimensions,
+  setPlayerSize,
+}: VideoPropTypes) {
   return (
     <div
       role="dialog"
@@ -35,7 +49,15 @@ function Video({ coordinates, ref, dragging, dimensions }: VideoPropTypes) {
         src="https://scoutui.com:8888/embed_player?urlServer=wss://scoutui.com:8443&streamName=rtsp://hull36:pacific1@10.0.36.5:554/front-low?&mediaProviders=WebRTC&autoplay=true"
       />
 
-      <div className="p-2 text-white">Draggable Area</div>
+      <div className="p-2 text-white flex justify-between items-center">
+        <button
+          className="bg-transparent p-1 hover:cursor-pointer hover:scale-110 transition-transform duration-100 ease-linear"
+          title="full screen"
+        >
+          <Fullscreen aria-lable="fullscreen" />
+        </button>
+        Draggable Area
+      </div>
     </div>
   );
 }

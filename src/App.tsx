@@ -24,6 +24,7 @@ function App() {
         dimensions={videoDimension}
         coordinates={coordinates}
         dragging={draggingRef.current}
+        setPlayerSize={setVideoDimensions}
       />
     </section>
   );
