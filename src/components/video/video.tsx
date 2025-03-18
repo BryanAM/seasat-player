@@ -1,4 +1,11 @@
-function Video({ coordinates, ref, dragging, dimensions }) {
+interface VideoPropTypes {
+  coordinates: { x: number; y: number };
+  ref: React.Ref<HTMLDivElement> | undefined;
+  dragging: boolean;
+  dimensions: { height: number; width: number };
+}
+
+function Video({ coordinates, ref, dragging, dimensions }: VideoPropTypes) {
   return (
     <div
       role="dialog"
