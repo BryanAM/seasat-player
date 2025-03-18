@@ -31,11 +31,11 @@ export const useDraggable = (height: number, width: number) => {
       if (animationFrameId.current)
         cancelAnimationFrame(animationFrameId.current);
       animationFrameId.current = requestAnimationFrame(() => {
-        const deltaX = event.clientX - initialMousePosRef.current.x;
-        const deltaY = event.clientY - initialMousePosRef.current.y;
+        const dX = event.clientX - initialMousePosRef.current.x;
+        const dY = event.clientY - initialMousePosRef.current.y;
 
-        let newX = initialWindowPosRef.current.x + deltaX;
-        let newY = initialWindowPosRef.current.y + deltaY;
+        let newX = initialWindowPosRef.current.x + dX;
+        let newY = initialWindowPosRef.current.y + dY;
 
         newX = clamp(newX, 0, window.innerWidth - videoDimensions.current.w);
         newY = clamp(newY, 0, window.innerHeight - videoDimensions.current.h);
