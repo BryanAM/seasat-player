@@ -31,7 +31,7 @@
   ```bash
   npm run dev
   ```
-  This starts the Vite development server. Open your browser at [http://localhost:3000](http://localhost:3000) (or the port specified by Vite).
+  This starts the Vite development server. Open your browser at [http://localhost:5173](http://localhost:5173) (or the port specified by Vite).
 
 - **Production Build:**
   ```bash
