@@ -86,6 +86,7 @@ function Video({
     >
       <iframe
         className="rounded-t-2xl grow"
+        title="Seasat demo video"
         width={isFullScreen ? "100%" : dimensions.width}
         height="75%"
         src="https://scoutui.com:8888/embed_player?urlServer=wss://scoutui.com:8443&streamName=rtsp://hull36:pacific1@10.0.36.5:554/front-low?&mediaProviders=WebRTC&autoplay=true"
@@ -97,7 +98,7 @@ function Video({
           title="full screen"
           onClick={() => handleToggleFullScreen()}
         >
-          <Fullscreen aria-lable="fullscreen" />
+          <Fullscreen aria-label="fullscreen" />
         </button>
         Mini Player Drag Area
       </div>
