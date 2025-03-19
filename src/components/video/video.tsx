@@ -1,5 +1,5 @@
 import { Fullscreen } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface VideoPropTypes {
   coordinates: { x: number; y: number };
@@ -32,7 +32,7 @@ function Video({
     setIsFullScreen((prev) => {
       if (prev) {
         unlockPosition();
-        handleResize();
+        // schedules handleResize to prevent
       } else {
         lockPosition();
         // transforming video position to top, left
@@ -75,6 +75,13 @@ function Video({
     ...baseStyle,
     ...fullscreenOverrides,
   } as React.CSSProperties;
+
+  // minimize the video player when fullScreen is toggled off
+  useEffect(() => {
+    if (!isFullScreen) {
+      handleResize();
+    }
+  }, [isFullScreen, handleResize]);
 
   return (
     <div

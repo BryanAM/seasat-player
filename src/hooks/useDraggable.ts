@@ -33,12 +33,12 @@ export const useDraggable = (height: number, width: number) => {
    * ignore when window is fullscreen
    *
    */
-  const handleResize = () => {
+  const handleResize = useCallback(() => {
     if (isFullScreen.current) return;
     const dX = window.innerWidth - width;
     const dY = window.innerHeight - height;
     setCoordinates({ x: dX, y: dY });
-  };
+  }, [isFullScreen, height, width]);
 
   // Full Screen Controls
   // Disallows resize & dragging
