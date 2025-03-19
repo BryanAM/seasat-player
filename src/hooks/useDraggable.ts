@@ -1,9 +1,16 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
+/**
+ * Prevents player from positioning outside bounds of window
+ * i.e. 0 -> window.innerHeight or window.innerWidth
+ */
 const clamp = (value: number, min: number, max: number) => {
   return Math.min(Math.max(value, min), max);
 };
 
+/**
+ * Height & Width refer to draggable's respective height and width
+ */
 export const useDraggable = (height: number, width: number) => {
   const videoRef = useRef<HTMLDivElement>(null);
   const isFullScreen = useRef<boolean>(false);
@@ -13,11 +20,19 @@ export const useDraggable = (height: number, width: number) => {
   const initialMousePosRef = useRef({ x: 0, y: 0 });
   const initialWindowPosRef = useRef({ x: 0, y: 0 });
 
+  // State for where player should paint on window
+  // Default is bottom, right
   const [coordinates, setCoordinates] = useState({
     x: window.innerWidth - width,
     y: window.innerHeight - height,
   });
 
+  /**
+   * When window resizes re-position draggable to be
+   * bottom, right
+   * ignore when window is fullscreen
+   *
+   */
   const handleResize = () => {
     if (isFullScreen.current) return;
     const dX = window.innerWidth - width;
@@ -36,7 +51,7 @@ export const useDraggable = (height: number, width: number) => {
   };
 
   /**
-   * Calculate pointer movment inrelation to the video window
+   * Calculate pointer movment in relation to the video window
    * Set window coordinates
    */
   const handlePointerMove = useCallback(

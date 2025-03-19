@@ -35,6 +35,7 @@ function Video({
         handleResize();
       } else {
         lockPosition();
+        // transforming video position to top, left
         coordinates.x = 0;
         coordinates.y = 0;
       }
@@ -67,11 +68,10 @@ function Video({
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        // you can also override transform, transition, etc.
       }
     : {};
 
-  const combined = {
+  const videoPlayerStyles = {
     ...baseStyle,
     ...fullscreenOverrides,
   } as React.CSSProperties;
@@ -82,7 +82,7 @@ function Video({
       aria-label="mini-player"
       ref={ref}
       className=" h-[220px] w-[300px] bg-zinc-800 rounded-2xl shadow-sm hover:shadow-xl fixed"
-      style={combined}
+      style={videoPlayerStyles}
     >
       <iframe
         className="rounded-t-2xl grow"
