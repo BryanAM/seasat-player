@@ -12,7 +12,7 @@ interface VideoPropTypes {
       width: number;
     }>
   >;
-  handleResize: any;
+  handleResize: () => void;
   unlockPosition: () => void;
   lockPosition: () => void;
 }
