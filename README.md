@@ -2,6 +2,9 @@
 
 "Seasat Player" is a mini-player for video streaming with drag-and-drop functionality and a fullscreen toggle. Built with React, TypeScript, Vite, and styled using Tailwind CSS, this project demonstrates how to create an interactive and responsive video player component.
 
+
+![seasats-example](./example.gif)
+
 ## Getting Started
 
 ### Prerequisites
