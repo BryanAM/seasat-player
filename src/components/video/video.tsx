@@ -96,6 +96,7 @@ function Video({
         <button
           className="bg-transparent p-1 hover:cursor-pointer hover:scale-110 transition-transform duration-100 ease-linear"
           title="full screen"
+          onPointerDown={(e) => e.stopPropagation()}
           onClick={() => handleToggleFullScreen()}
         >
           <Fullscreen aria-label="fullscreen" />
