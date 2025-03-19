@@ -12,6 +12,9 @@ interface VideoPropTypes {
       width: number;
     }>
   >;
+  handleResize: any;
+  unlockPosition: () => void;
+  lockPosition: () => void;
 }
 
 function Video({
@@ -19,16 +22,19 @@ function Video({
   ref,
   dragging,
   dimensions,
-  setPlayerSize,
-  setOrigin,
+  handleResize,
+  unlockPosition,
+  lockPosition,
 }: VideoPropTypes) {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const handleToggleFullScreen = () => {
     setIsFullScreen((prev) => {
       if (prev) {
-        setOrigin();
+        unlockPosition();
+        handleResize();
       } else {
+        lockPosition();
         coordinates.x = 0;
         coordinates.y = 0;
       }
@@ -67,7 +73,6 @@ function Video({
 
   const combined = {
     ...baseStyle,
-
     ...fullscreenOverrides,
   } as React.CSSProperties;
 
@@ -94,7 +99,7 @@ function Video({
         >
           <Fullscreen aria-lable="fullscreen" />
         </button>
-        Draggable Area
+        Mini Player Drag Area
       </div>
     </div>
   );

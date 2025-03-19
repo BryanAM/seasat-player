@@ -6,6 +6,7 @@ const clamp = (value: number, min: number, max: number) => {
 
 export const useDraggable = (height: number, width: number) => {
   const videoRef = useRef<HTMLDivElement>(null);
+  const isFullScreen = useRef<boolean>(false);
 
   const draggingRef = useRef<boolean>(false);
   const animationFrameId = useRef<number>(null);
@@ -18,9 +19,20 @@ export const useDraggable = (height: number, width: number) => {
   });
 
   const handleResize = () => {
+    if (isFullScreen.current) return;
     const dX = window.innerWidth - width;
     const dY = window.innerHeight - height;
     setCoordinates({ x: dX, y: dY });
+  };
+
+  // Full Screen Controls
+  // Disallows resize & dragging
+  const unlockPosition = () => {
+    isFullScreen.current = false;
+  };
+
+  const lockPosition = () => {
+    isFullScreen.current = true;
   };
 
   /**
@@ -72,6 +84,7 @@ export const useDraggable = (height: number, width: number) => {
   const handlePointerDown = useCallback(
     (event: PointerEvent) => {
       if (
+        !isFullScreen.current &&
         videoRef.current &&
         event.target instanceof Node &&
         videoRef.current.contains(event.target)
@@ -100,5 +113,12 @@ export const useDraggable = (height: number, width: number) => {
     };
   });
 
-  return { videoRef, coordinates, draggingRef, handleResize };
+  return {
+    videoRef,
+    coordinates,
+    draggingRef,
+    handleResize,
+    unlockPosition,
+    lockPosition,
+  };
 };

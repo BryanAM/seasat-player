@@ -4,16 +4,23 @@ import Navigation from "./components/navigation/navigation";
 import Video from "./components/video/video";
 import { useDraggable } from "./hooks/useDraggable";
 
+const DEFAULT_PLAYER_HEIGHT = 200;
+const DEFAULT_PLAYER_WIDTH = 300;
+
 function App() {
   const [videoDimension, setVideoDimensions] = useState({
-    height: 200,
-    width: 300,
+    height: DEFAULT_PLAYER_HEIGHT,
+    width: DEFAULT_PLAYER_WIDTH,
   });
 
-  const { videoRef, coordinates, draggingRef, handleResize } = useDraggable(
-    videoDimension.height,
-    videoDimension.width
-  );
+  const {
+    videoRef,
+    coordinates,
+    draggingRef,
+    handleResize,
+    unlockPosition,
+    lockPosition,
+  } = useDraggable(videoDimension.height, videoDimension.width);
 
   return (
     <section className="flex flex-col bg-accent min-h-dvh">
@@ -25,7 +32,9 @@ function App() {
         coordinates={coordinates}
         dragging={draggingRef.current}
         setPlayerSize={setVideoDimensions}
-        setOrigin={handleResize}
+        handleResize={handleResize}
+        unlockPosition={unlockPosition}
+        lockPosition={lockPosition}
       />
     </section>
   );
