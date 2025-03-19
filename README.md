@@ -4,7 +4,7 @@
 
 
 ![seasats-example](./example.gif)
-<img src="./example.gif" height="50%"/>
+<img src="./example.gif" height="100px"/>
 
 
 ## Getting Started
